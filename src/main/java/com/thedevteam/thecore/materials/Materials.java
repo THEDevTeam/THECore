@@ -10,7 +10,7 @@ import org.spout.api.material.MaterialRegistry;
 public abstract class Materials {
     
     @SuppressWarnings("unchecked")
-    protected static <T extends Material> T register(T material) {
+    protected final static <T extends Material> T register(T material) {
         String name = material.getName();
         Material registered = MaterialRegistry.get(name);
         if(registered != null){
