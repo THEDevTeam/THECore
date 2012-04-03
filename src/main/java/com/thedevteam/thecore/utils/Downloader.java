@@ -23,7 +23,7 @@ public class Downloader {
     }
 
     public static File fetch(String location, String filename) {
-    	String destination = "plugins/THEIndustrialMod/Parts" + File.separator + filename;
+    	String destination = "plugins/THECore/Parts" + File.separator + filename;
         try {
             cancelled = false;
             count = total = itemCount = itemTotal = 0;
@@ -35,7 +35,7 @@ public class Downloader {
             System.out.println("   - " + filename + " finished.");
             return new File(destination);
         } catch (IOException ex) {
-            System.out.println("[iConomy] Error Downloading File: " + ex);
+            System.out.println("[THECore] Error Downloading File: " + ex);
             return null;
         }
     }
@@ -44,7 +44,7 @@ public class Downloader {
         URLConnection connection = new URL(location).openConnection();
         connection.setUseCaches(false);
         lastModified = connection.getLastModified();
-        String destination = "plugins/THEIndustrialMod/Parts" + File.separator + filename;
+        String destination = "plugins/THECore/Parts" + File.separator + filename;
         File parentDirectory = new File(destination).getParentFile();
         if (parentDirectory != null) 
             parentDirectory.mkdirs();
