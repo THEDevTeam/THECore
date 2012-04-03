@@ -84,6 +84,9 @@ public class PartRegister {
 			      }
 			if(f == null){
 				f =Downloader.fetch("", dep+".jar"); //TODO: Create Repo
+				if (f== null){
+					tc.log(Level.INFO, "Dependency "+dep+" Is not found for "+p.getName());
+				}
 			}
 			Part d = loadPart(f);
 			if(d !=null){
