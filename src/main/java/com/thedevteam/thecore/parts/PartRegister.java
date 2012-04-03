@@ -70,6 +70,7 @@ public class PartRegister {
 
 	  private boolean resolveDependencies(Part p) {
 		List<String> deps = p.getDependencies();
+		if (deps.isEmpty()) return true;
 		for (String dep:deps){
 			// check to see if already loaded
 			if(isLoaded(dep))continue;
@@ -95,14 +96,17 @@ public class PartRegister {
 		    	 return false;
 		     }
 		}
+		tc.log(Level.INFO, "All Depencencies found for "+p.getName());
 		return true;
+		
+		
 		
 	}
 
 	private void addPart(Part p) {
 
-	    Parts.put(p.getName(), p);
-	    tc.log(Level.INFO, "Part " + p.getName() + " Loaded");
+	    Parts.put(p.getName().toLowerCase(), p);
+	    tc.log(Level.INFO, "Part " + p.getName() + " Added");
 	  }
 
 	  private Part loadPart(File f) {
@@ -125,7 +129,7 @@ public class PartRegister {
 	      try {
 	          url.add(f.toURI().toURL());
 	        } catch (MalformedURLException e) {
-	          tc.log(Level.SEVERE, e);
+	          tc.log(Level.SEVERE, e.getLocalizedMessage());
 	        }
 	      
 	      ClassLoader c = tc.getClass().getClassLoader();
@@ -135,6 +139,7 @@ public class PartRegister {
 	        Class<? extends Part> partClass = clazz.asSubclass(Part.class);
 	        Constructor<? extends Part> ctor = partClass.getConstructor(new Class[] { tc.getClass() });
 	        Part p = (Part)ctor.newInstance(new Object[] { tc });
+	        tc.log(Level.INFO, "Part " + f.getName() + " loaded.");
 
 	        return p;
 	      }
@@ -153,14 +158,21 @@ public class PartRegister {
 	  public void enableAllParts() {
 		  Set<Entry<String, Part>> es = new HashSet<Entry<String, Part>>(Parts.entrySet());
 		  while(!es.isEmpty()){
-			  Part p = es.iterator().next().getValue();
-			  for (String dep: p.getDependencies()){
-				  while(es.iterator().hasNext()){
+			  Entry<String, Part> p = es.iterator().next();
+			  for (String dep: p.getValue().getDependencies()){
+				  while(es.iterator().hasNext()&&es.iterator().next()!= p){
 					  Entry<String, Part> d = es.iterator().next();
-					  if (dep.equalsIgnoreCase(d.getKey()))d.getValue().init(); 
+					  if (dep.equalsIgnoreCase(d.getKey())){
+						  d.getValue().init();
+						  tc.log(Level.INFO, "Part " + d.getValue().getName() + " Is initialised as Dependency.");
+					  es.remove(d);
+					  break;
+					  }
 				  }
 			  }
-			  p.init();
+			  p.getValue().init();
+			  tc.log(Level.INFO, "Part " + p.getValue().getName() + " has initialised.");
+			  es.remove(p);
 		  }
 
 	  }
