@@ -22,15 +22,17 @@
         </dependency>
         <dependency>
             <groupId>org.spout</groupId>
-            <artifactId>SpoutAPI</artifactId>
+            <artifactId>spoutapi</artifactId>
             <version>dev-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <repositories>
-        <repository>
-            <id>spout-repo</id>
-            <url>http://repo.getspout.org</url>
-        </repository>
+
+         <repository>
+            <id>spout</id>
+            <name>spout</name>
+            <url>http://nexus.spout.org/content/groups/public/</url>
+</repository>
     </repositories>
     
         <!-- Build -->
