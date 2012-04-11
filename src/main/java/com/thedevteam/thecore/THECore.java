@@ -13,8 +13,8 @@ import com.thedevteam.thecore.parts.PartRegister;
  */
 public class THECore extends CommonPlugin{
 	
-	public PartRegister pr;
-	public Logger log = Logger.getLogger("Minecraft");
+    public PartRegister pr;
+    public static final Logger log = Logger.getLogger("Minecraft");
 
     @Override
     public void onEnable() {
@@ -24,11 +24,9 @@ public class THECore extends CommonPlugin{
 
     @Override
     public void onDisable() {
-    	
     }
 
-	public void log(Level info, String string) {
-		log.log(info, string);
-		
-	}
+    public void log(Level info, String string) {
+        log.log(info, string);
+    }
 }

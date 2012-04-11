@@ -9,8 +9,9 @@ import org.spout.api.material.MaterialRegistry;
  */
 public abstract class Materials {
     
+    @Deprecated // TODO Doesn't have intended behavior. Deprecated as a Reminder
     @SuppressWarnings("unchecked")
-    protected final static <T extends Material> T register(T material) {
+    protected static <T extends Material> T register(T material) {
         String name = material.getName();
         Material registered = MaterialRegistry.get(name);
         if(registered != null){
