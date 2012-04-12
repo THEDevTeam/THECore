@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.spout.api.Spout;
 import org.spout.api.material.Material;
 
 /**
@@ -12,11 +13,17 @@ import org.spout.api.material.Material;
  *
  */
 public class WebTier {
-    private static Map<String, TierGroup> groups = new HashMap<String, TierGroup>();
-    private static Map<Material, List<TierGroup>> groupsIn = new HashMap<Material, List<TierGroup>>();
-    private static Map<Material, Double> values = new HashMap<Material, Double>();
+    private Map<String, TierGroup> groups = new HashMap<String, TierGroup>();
+    private Map<Material, List<TierGroup>> groupsIn = new HashMap<Material, List<TierGroup>>();
+    private Map<Material, Double> values = new HashMap<Material, Double>();
+    private final WebTierListener listener;
+
+    public WebTier() {
+        listener = new WebTierListener(this);
+        Spout.getEventManager().registerEvents(listener, Spout.getEngine().getPluginManager().getPlugin("THECore"));
+    } 
     
-    public static void addGroup(TierGroup group){
+    public void addGroup(TierGroup group){
         groups.put(group.name, group);
         for(Material m : group.getMaterials()){
             if(groupsIn.get(m) == null) groupsIn.put(m, new ArrayList<TierGroup>());
@@ -25,7 +32,7 @@ public class WebTier {
         }
     }
     
-    public static void addMaterial(Material m, TierGroup... tierGroups){
+    public void addMaterial(Material m, TierGroup... tierGroups){
         if(values.get(m) == null) values.put(m, 0d);
         for(TierGroup g : tierGroups){
             groups.put(g.name, g);
@@ -35,7 +42,7 @@ public class WebTier {
         }
     }
     
-    public static void setValue(Material original, double value){
+    public void setValue(Material original, double value){
         if(!values.containsKey(original)) return;
         if(value>1) value = 1;
         if(value<0) value = 0;
@@ -43,7 +50,7 @@ public class WebTier {
         addValue(original, toAdd);
     }
     
-    public static void addValue(Material original, double value){
+    public void addValue(Material original, double value){
         if(!values.containsKey(original)) return;
         values.put(original, values.get(original) + value);
         for(TierGroup g : groupsIn.get(original)){
@@ -59,10 +66,11 @@ public class WebTier {
         }        
     }
     
-    public static double getValue(Material original){
+    public double getValue(Material original){
         if(values.containsKey(original)){
             return values.get(original);
         }
         return Double.POSITIVE_INFINITY;
     }
+    
 }

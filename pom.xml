@@ -32,7 +32,7 @@
             <id>spout</id>
             <name>spout</name>
             <url>http://nexus.spout.org/content/groups/public/</url>
-</repository>
+        </repository>
     </repositories>
     
         <!-- Build -->

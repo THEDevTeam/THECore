@@ -14,10 +14,15 @@ import org.spout.api.event.inventory.PlayerInventoryCraftEvent;
  *
  */
 public class WebTierListener implements Listener{
+    private final WebTier parent;
 
+    public WebTierListener(WebTier parent) {
+        this.parent = parent;
+    }
+    
     @EventHandler(order = Order.LATEST)
     public void onCraftEvent(PlayerInventoryCraftEvent event){
-        double lack = 1 - WebTier.getValue(event.getResult().getMaterial());
+        double lack = 1 - parent.getValue(event.getResult().getMaterial());
         if(Math.random() < lack){
             event.setCancelled(true);
             Spout.getEventManager().callEvent(new CraftFailEvent(event));
@@ -26,7 +31,7 @@ public class WebTierListener implements Listener{
     
     @EventHandler(order = Order.LATEST)
     public void onBlockPlace(BlockChangeEvent event){
-        double lack = 1 - WebTier.getValue(event.getSnapshot().getMaterial());
+        double lack = 1 - parent.getValue(event.getSnapshot().getMaterial());
         if(Math.random() < lack){
             event.setCancelled(true);
             Spout.getEventManager().callEvent(new BlockPlaceFailEvent(event));
